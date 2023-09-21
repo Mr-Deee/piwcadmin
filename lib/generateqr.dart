@@ -15,6 +15,10 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+
+    // Format the date as a string (e.g., "2023-09-21")
+    String formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     return Scaffold(
       appBar: AppBar(
         title: Text('Generate QR Code for Attendance'),
@@ -51,7 +55,8 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                 });
 
                 // Write the QR code data to Firebase with the assigned ID
-                firestore.collection('attendance').doc(qrCodeId).set({
+                firestore.collection('GenearatedQr').doc(qrCodeId).set({
+                  "Date":formattedDate,
                   'data': qrCodeData,
                   'timestamp': FieldValue.serverTimestamp(),
                 });
