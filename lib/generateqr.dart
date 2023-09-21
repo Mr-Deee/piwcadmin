@@ -13,6 +13,23 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
   String qrCodeData = '';
   String qrCodeId = '';
 
+
+  List<Map<String, dynamic>> attendanceData = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAttendanceData();
+    _loadAttendanceData();
+  }
+
+  Future<void> _loadAttendanceData() async {
+    final data = await getAttendanceData();
+    setState(() {
+      attendanceData = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
@@ -63,13 +80,55 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
               },
               child: Text('Generate QR Code'),
             ),
+
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Text("ATTENDANCE")
+
+                  ],),
+                  Column(children: [
+                  ListView.builder(
+                  itemCount: attendanceData.length,
+                    itemBuilder: (context, index) {
+                      final date = attendanceData[index]['date'];
+                      final email = attendanceData[index]['email'];
+
+                      return ListTile(
+                        title: Text('Date: $date'),
+                        subtitle: Text('Email: $email'),
+                      );
+                    },
+                  ),
+      );
+                  ],)
+
+              ],
+            )
           ],
         ),
       ),
     );
   }
+  Future<List<Map<String, dynamic>>> getAttendanceData() async {
+    final QuerySnapshot<Map<String, dynamic>> attendanceSnapshot =
+    await FirebaseFirestore.instance.collection('attendance').get();
 
+    final List<Map<String, dynamic>> attendanceList = [];
+
+    attendanceSnapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> doc) {
+      final dataA = doc.data();
+      attendanceList.add(dataA!);
+    });
+
+    return attendanceList;
+  }
 }
+
+
+
+
 
 void main() {
   runApp(MaterialApp(
