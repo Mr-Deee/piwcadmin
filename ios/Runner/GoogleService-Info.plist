@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>299027057720-apk7uar9hpilhqujjhgeppj44n1qm4i9.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAVYmh-kjHsGrxwf4fwqszOZehj6Va4m0A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>299027057720</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.piwcadmin</string>
+	<key>PROJECT_ID</key>
+	<string>piwc-5e5a0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>piwc-5e5a0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:299027057720:ios:fa6e61022bdbf905d36acd</string>
+	<key>DATABASE_URL</key>
+	<string>https://piwc-5e5a0-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
