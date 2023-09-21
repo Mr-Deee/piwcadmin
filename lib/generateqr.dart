@@ -101,7 +101,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                       );
                     },
                   ),
-      );
+
                   ],)
 
               ],
