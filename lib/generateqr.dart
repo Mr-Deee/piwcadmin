@@ -38,75 +38,93 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
     String formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     return Scaffold(
       appBar: AppBar(
-        title: Text('Generate QR Code for Attendance'),
+        title: Text('PIWC Attendance'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Remove the QrImage from the Column
-        Container(  // Wrap QrImage in a Container or any appropriate widget
-        child:  QrImageView(
-              data: qrCodeData,
-              size: 200.0,
-            ),),
-            SizedBox(height: 20.0),
-            Text(
-              'QR Code ID: $qrCodeId',
-              style: TextStyle(fontSize: 18.0),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                // Generate a random QR Code ID (you can use any logic to generate IDs)
-                String newQrCodeId =
-                DateTime.now().millisecondsSinceEpoch.toString();
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Remove the QrImage from the Column
+              Container(  // Wrap QrImage in a Container or any appropriate widget
+              child:  QrImageView(
+                    data: qrCodeData,
+                    size: 200.0,
+                  ),),
+                  SizedBox(height: 20.0),
+                  Text(
+                    'QR Code ID: $qrCodeId',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Generate a random QR Code ID (you can use any logic to generate IDs)
+                      String newQrCodeId =
+                      DateTime.now().millisecondsSinceEpoch.toString();
 
-                // Generate a new QR code data (you can use any logic for the data)
-                String newQrCodeData = 'Attendance for $newQrCodeId';
+                      // Generate a new QR code data (you can use any logic for the data)
+                      String newQrCodeData = 'Attendance for $newQrCodeId';
 
-                // Update the QR code ID and data in the state
-                setState(() {
-                  qrCodeId = newQrCodeId;
-                  qrCodeData = newQrCodeData;
-                });
+                      // Update the QR code ID and data in the state
+                      setState(() {
+                        qrCodeId = newQrCodeId;
+                        qrCodeData = newQrCodeData;
+                      });
 
-                // Write the QR code data to Firebase with the assigned ID
-                firestore.collection('GenearatedQr').doc(qrCodeId).set({
-                  "Date":formattedDate,
-                  'data': qrCodeData,
-                  'timestamp': FieldValue.serverTimestamp(),
-                });
-              },
-              child: Text('Generate QR Code'),
-            ),
-
-            Row(
-              children: [
-                Column(
-                  children: [
-                    Text("ATTENDANCE")
-
-                  ],),
-                  Column(children: [
-                  ListView.builder(
-                  itemCount: attendanceData.length,
-                    itemBuilder: (context, index) {
-                      final date = attendanceData[index]['DateChecked'];
-                      final email = attendanceData[index]['email'];
-
-                      return ListTile(
-                        title: Text('Date: $date'),
-                        subtitle: Text('Email: $email'),
-                      );
+                      // Write the QR code data to Firebase with the assigned ID
+                      firestore.collection('GenearatedQr').doc(qrCodeId).set({
+                        "Date":formattedDate,
+                        'data': qrCodeData,
+                        'timestamp': FieldValue.serverTimestamp(),
+                      });
                     },
+                    child: Text('Generate QR Code'),
                   ),
 
-                  ],)
 
-              ],
-            )
-          ],
+
+                ],
+              ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Column(
+                        children: [
+                          Text("ATTENDANCE")
+
+                        ],
+
+                      ),
+                    ),
+                      Column(
+              children: [
+                      Container(
+                        height: 500,
+                        child: ListView.builder(
+                        itemCount: attendanceData.length,
+                          itemBuilder: (context, index) {
+                            final date = attendanceData[index]['DateChecked'];
+                            final email = attendanceData[index]['email'];
+
+                            return ListTile(
+                              title: Text('Date: $date'),
+                              subtitle: Text('Email: $email'),
+                            );
+                          },
+                        ),
+                      ),
+
+                      ]
+
+
+
+
+             )
+            ],
+          ),
         ),
       ),
     );
