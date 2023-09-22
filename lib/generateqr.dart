@@ -92,7 +92,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                   ListView.builder(
                   itemCount: attendanceData.length,
                     itemBuilder: (context, index) {
-                      final date = attendanceData[index]['date'];
+                      final date = attendanceData[index]['DateChecked'];
                       final email = attendanceData[index]['email'];
 
                       return ListTile(
@@ -113,7 +113,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
   }
   Future<List<Map<String, dynamic>>> getAttendanceData() async {
     final QuerySnapshot<Map<String, dynamic>> attendanceSnapshot =
-    await FirebaseFirestore.instance.collection('attendance').get();
+    await FirebaseFirestore.instance.collection('Attendance').get();
 
     final List<Map<String, dynamic>> attendanceList = [];
 
