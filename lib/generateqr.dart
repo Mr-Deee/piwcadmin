@@ -130,18 +130,58 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
     );
   }
   Future<List<Map<String, dynamic>>> getAttendanceData() async {
-    final QuerySnapshot<Map<String, dynamic>> attendanceSnapshot =
-    await FirebaseFirestore.instance.collection('Attendance').get();
+    final DateTime currentDate = DateTime.now();
+    final DateTime previousDate = currentDate.subtract(Duration(days: 1));
+    String formattedDate =
+        "${currentDate.year}-${currentDate.month.toString().padLeft(2, '0')}-${currentDate.day.toString().padLeft(2, '0')}";
+    String formattedPreviousDate =
+        "${previousDate.year}-${previousDate.month.toString().padLeft(2, '0')}-${previousDate.day.toString().padLeft(2, '0')}";
 
-    final List<Map<String, dynamic>> attendanceList = [];
+    final QuerySnapshot<Map<String, dynamic>> attendanceSnapshot =
+    await FirebaseFirestore.instance
+        .collection('Attendance')
+        .where('DateChecked',
+        isGreaterThanOrEqualTo: formattedPreviousDate,
+        isLessThanOrEqualTo: formattedDate)
+        .get();
+
+    List<Map<String, dynamic>> attendanceList = [];
 
     attendanceSnapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> doc) {
       final dataA = doc.data();
       attendanceList.add(dataA!);
     });
 
+    // Sort the attendanceList in descending order by 'DateChecked'
+    attendanceList.sort((a, b) {
+      DateTime dateA = DateTime.parse(a['DateChecked']);
+      DateTime dateB = DateTime.parse(b['DateChecked']);
+      return dateB.compareTo(dateA); // Compare in descending order
+    });
+
     return attendanceList;
   }
+
+
+//   Future<List<Map<String, dynamic>>> getAttendanceData() async {
+//     final DateTime currentDate = DateTime.now();
+//     final DateTime previousDate = currentDate.subtract(Duration(days: 1));
+// print(currentDate);
+//     final QuerySnapshot<Map<String, dynamic>> attendanceSnapshot =
+//     await FirebaseFirestore.instance.collection('Attendance')
+//         .where('DateChecked', isGreaterThanOrEqualTo: previousDate, isLessThanOrEqualTo: currentDate)
+//         .get();
+//
+//
+//     final List<Map<String, dynamic>> attendanceList = [];
+//
+//     attendanceSnapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> doc) {
+//       final dataA = doc.data();
+//       attendanceList.add(dataA!);
+//     });
+//
+//     return attendanceList;
+//   }
 }
 
 
