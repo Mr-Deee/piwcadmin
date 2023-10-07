@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:excel/excel.dart';
+
 
 class AttendanceQRCodeScreen extends StatefulWidget {
   @override
@@ -120,6 +122,14 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                         ),
                       ),
 
+
+
+                ElevatedButton(
+                  onPressed: () {
+                    exportToExcel(); // Call the export function when the button is pressed
+                  },
+                  child: Text('Export to Excel'),
+                ),
                       ]
 
 
@@ -132,6 +142,32 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
       ),
     );
   }
+
+
+
+  Future<void> exportToExcel() async {
+    final excelFile = Excel.createExcel();
+    final sheet = excelFile['Sheet1']; // Change the sheet name as needed
+
+    // Add headers to the Excel sheet
+    sheet.cell(CellIndex.indexByString("A1")).value = 'Date';
+    sheet.cell(CellIndex.indexByString("B1")).value = 'Email';
+
+    // Add attendance data to the Excel sheet
+    for (int i = 0; i < attendanceData.length; i++) {
+      final date = attendanceData[i]['DateChecked'];
+      final email = attendanceData[i]['email'];
+      sheet.cell(CellIndex.indexByString("A${i + 2}")).value = date;
+      sheet.cell(CellIndex.indexByString("B${i + 2}")).value = email;
+    }
+
+    // Save the Excel file to a temporary directory
+    final file = await excelFile.encode();
+
+    // You can save the file or share it using a file picker or other methods
+    // For example, you can use the path_provider package to get the documents directory and save the file there.
+  }
+
   Future<List<Map<String, dynamic>>> getAttendanceData() async {
     final DateTime currentDate = DateTime.now();
     final DateTime previousDate = currentDate.subtract(Duration(days: 1));
@@ -164,7 +200,6 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
 
     return attendanceList;
   }
-
 
 //   Future<List<Map<String, dynamic>>> getAttendanceData() async {
 //     final DateTime currentDate = DateTime.now();
