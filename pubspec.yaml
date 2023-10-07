@@ -57,6 +57,7 @@ dev_dependencies:
   firebase_storage:
   provider: ^6.0.2
   path_provider: ^2.0.3
+
   google_fonts:
   # ^3.0.1
   intl: ^0.18.1

@@ -222,25 +222,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
     return attendanceList;
   }
 
-//   Future<List<Map<String, dynamic>>> getAttendanceData() async {
-//     final DateTime currentDate = DateTime.now();
-//     final DateTime previousDate = currentDate.subtract(Duration(days: 1));
-// print(currentDate);
-//     final QuerySnapshot<Map<String, dynamic>> attendanceSnapshot =
-//     await FirebaseFirestore.instance.collection('Attendance')
-//         .where('DateChecked', isGreaterThanOrEqualTo: previousDate, isLessThanOrEqualTo: currentDate)
-//         .get();
-//
-//
-//     final List<Map<String, dynamic>> attendanceList = [];
-//
-//     attendanceSnapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> doc) {
-//       final dataA = doc.data();
-//       attendanceList.add(dataA!);
-//     });
-//
-//     return attendanceList;
-//   }
+
 
   displayToast(String message, BuildContext context) {
     Fluttertoast.showToast(msg: message);
