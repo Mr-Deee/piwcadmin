@@ -90,7 +90,12 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                   ),
 
 
-
+                  ElevatedButton(
+                    onPressed: () {
+                      exportToExcel(); // Call the export function when the button is pressed
+                    },
+                    child: Text('Export to Excel'),
+                  ),
                 ],
               ),
 
@@ -124,12 +129,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
 
 
 
-                ElevatedButton(
-                  onPressed: () {
-                    exportToExcel(); // Call the export function when the button is pressed
-                  },
-                  child: Text('Export to Excel'),
-                ),
+
                       ]
 
 
