@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:excel/excel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 class AttendanceQRCodeScreen extends StatefulWidget {
@@ -90,22 +94,30 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                   ),
 
 
-                  ElevatedButton(
-                    onPressed: () {
-                      exportToExcel(); // Call the export function when the button is pressed
-                    },
-                    child: Text('Export to Excel'),
-                  ),
+
                 ],
               ),
 
                     Padding(
                       padding: const EdgeInsets.all(18.0),
-                      child: Column(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("ATTENDANCE")
+                          Text("ATTENDANCE",style: TextStyle(fontWeight: FontWeight.bold),),
+                        ElevatedButton(
+                                onPressed: () {
+                                  exportToExcel(); // Call the export function when the button is pressed
+                                },
+                                child: Column(
+                                  children: [
+                                    Icon(Icons.import_export_rounded),
+                                    Text('Export to Excel'),
+                                  ],
+                                ),
+                              ),
+                            ],
 
-                        ],
+
 
                       ),
                     ),
@@ -144,7 +156,6 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
   }
 
 
-
   Future<void> exportToExcel() async {
     final excelFile = Excel.createExcel();
     final sheet = excelFile['Sheet1']; // Change the sheet name as needed
@@ -161,12 +172,22 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
       sheet.cell(CellIndex.indexByString("B${i + 2}")).value = email;
     }
 
-    // Save the Excel file to a temporary directory
+    // Get the documents directory
+    final directory = await getApplicationDocumentsDirectory();
+
+    // Define the file path
+    final filePath = '${directory.path}/attendance_excel.xlsx';
+
+    // Save the Excel file to the documents directory
     final file = await excelFile.encode();
 
-    // You can save the file or share it using a file picker or other methods
-    // For example, you can use the path_provider package to get the documents directory and save the file there.
+    File(filePath).writeAsBytesSync(file!);
+    displayToast("Your File is this directory:" + filePath, context);
+
+    // You can now share or open the file using a file picker or other methods
+    // For example, you can use the 'open_file' package to open the file.
   }
+
 
   Future<List<Map<String, dynamic>>> getAttendanceData() async {
     final DateTime currentDate = DateTime.now();
@@ -220,6 +241,12 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
 //
 //     return attendanceList;
 //   }
+
+  displayToast(String message, BuildContext context) {
+    Fluttertoast.showToast(msg: message);
+
+// user created
+  }
 }
 
 
