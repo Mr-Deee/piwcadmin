@@ -38,6 +38,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
     String formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('PIWC Attendance'),
       ),
       body: Center(
