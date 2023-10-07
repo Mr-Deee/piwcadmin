@@ -56,6 +56,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                   SizedBox(height: 20.0),
                   Text(
                     'QR Code ID: $qrCodeId',
+
                     style: TextStyle(fontSize: 18.0),
                   ),
                   SizedBox(height: 20.0),
@@ -70,6 +71,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
 
                       // Update the QR code ID and data in the state
                       setState(() {
+
                         qrCodeId = newQrCodeId;
                         qrCodeData = newQrCodeData;
                       });
