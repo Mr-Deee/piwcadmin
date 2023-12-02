@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,11 +47,63 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('PIWC Attendance'),
+        actions: [    IconButton(
+          onPressed: () {
+
+
+            showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Sign Out'),
+                  backgroundColor: Colors.white,
+                  content: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Text('Are you certain you want to Sign Out?'),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text(
+                        'Yes',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () {
+                        print('yes');
+                        FirebaseAuth.instance.signOut();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, "/signin", (route) => false);
+                        // Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          icon: const Icon(
+            Icons.logout,
+            color: Colors.black,
+          ),
+        ),],
       ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             children: [
+
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -58,15 +111,15 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
               Container(  // Wrap QrImage in a Container or any appropriate widget
               child:  QrImageView(
                     data: qrCodeData,
-                    size: 200.0,
+                    size: 100.0,
                   ),),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 10.0),
                   Text(
                     'QR Code ID: $qrCodeId',
 
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(fontSize: 12.0),
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 10.0),
                   ElevatedButton(
                     onPressed: () {
                       // Generate a random QR Code ID (you can use any logic to generate IDs)
@@ -122,9 +175,13 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                       ),
                     ),
           Container(
-            height: 500,
-            child: StreamBuilder(
-              stream:  FirebaseFirestore.instance.collection('Attendance').snapshots(), // replace with your actual database reference
+            height: MediaQuery.of(context)
+                .size
+                .height *
+                0.39,
+            child:
+            StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('Attendance').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
@@ -132,6 +189,14 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   List<DocumentSnapshot> attendanceData = snapshot.data!.docs;
+
+                  // Filter data by current date
+                  attendanceData = attendanceData.where((document) {
+                    final date = document['DateChecked'];
+                    // Replace 'currentDate' with the actual way you get the current date in your app
+                    final currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+                    return date == currentDate;
+                  }).toList();
 
                   return ListView.builder(
                     itemCount: attendanceData.length,
@@ -145,17 +210,20 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                         title: Text('Date: $date'),
                         subtitle: Column(
                           children: [
-                            Text('Email: $email'??""),
+                            Text('Email: $email' ?? ""),
                             Text('Phone: $phone'),
-                            Text('Occupation: $occupation'??""),
+                            Text('Occupation: $occupation' ?? ""),
+                            Divider(height: 2.0, color: Colors.black),
                           ],
                         ),
+
                       );
                     },
                   );
                 }
               },
-            ),
+            )
+
           ),
 
             ],
