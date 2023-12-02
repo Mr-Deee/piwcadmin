@@ -46,7 +46,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('PIWC Attendance'),
+        title: Text('PIWC ADMIN'),
         actions: [    IconButton(
           onPressed: () {
 
@@ -75,7 +75,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
                         print('yes');
                         FirebaseAuth.instance.signOut();
                         Navigator.pushNamedAndRemoveUntil(
-                            context, "/signin", (route) => false);
+                            context, "/login", (route) => false);
                         // Navigator.of(context).pop();
                       },
                     ),

@@ -80,7 +80,7 @@ class _SigninState extends State<Signin> {
                                     ),
 
                                     //Username
-
+                                    Text("ADMIN SIGNIN",style: TextStyle(color: Colors.white,fontSize: 20),),
                                     //email
 
                                     //Phone
@@ -174,6 +174,9 @@ class _SigninState extends State<Signin> {
                                             ),
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () {
+
+                                                Navigator.of(context).pushNamed("/forgot");
+
                                                 HapticFeedback.lightImpact();
                                                 Fluttertoast.showToast(
                                                   msg:
@@ -198,7 +201,7 @@ class _SigninState extends State<Signin> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                                return SignUp();
+                                                return registration();
                                               }),
                                             );
                                           },

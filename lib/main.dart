@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:piwcadmin/pages/forgotpassword.dart';
 import 'package:piwcadmin/pages/signin.dart';
 import 'package:piwcadmin/pages/signup.dart';
 import 'firebase_options.dart';
@@ -37,8 +38,9 @@ class MyApp extends StatelessWidget {
 
     routes: {
     "/login": (context) => Signin(),
+    "/forgot": (context) => Forgotpassword(),
     "/generateqr":(context)=>AttendanceQRCodeScreen(),
-    "/registration": (context) => SignUp(),
+    "/registration": (context) => registration(),
 
 
 
