@@ -121,33 +121,43 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
 
                       ),
                     ),
-                      Column(
-              children: [
-                      Container(
-                        height: 500,
-                        child: ListView.builder(
-                        itemCount: attendanceData.length,
-                          itemBuilder: (context, index) {
-                            final date = attendanceData[index]['DateChecked'];
-                            final email = attendanceData[index]['email'];
+          Container(
+            height: 500,
+            child: StreamBuilder(
+              stream:  FirebaseFirestore.instance.collection('Attendance').snapshots(), // replace with your actual database reference
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<DocumentSnapshot> attendanceData = snapshot.data!.docs;
 
-                            return ListTile(
-                              title: Text('Date: $date'),
-                              subtitle: Text('Email: $email'),
-                            );
-                          },
+                  return ListView.builder(
+                    itemCount: attendanceData.length,
+                    itemBuilder: (context, index) {
+                      final date = attendanceData[index]['DateChecked'];
+                      final email = attendanceData[index]['email'];
+                      final phone = attendanceData[index]['phone'];
+                      final occupation = attendanceData[index]['Occupation'];
+
+                      return ListTile(
+                        title: Text('Date: $date'),
+                        subtitle: Column(
+                          children: [
+                            Text('Email: $email'??""),
+                            Text('Phone: $phone'),
+                            Text('Occupation: $occupation'??""),
+                          ],
                         ),
-                      ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ),
 
-
-
-
-                      ]
-
-
-
-
-             )
             ],
           ),
         ),
@@ -182,7 +192,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
     final file = await excelFile.encode();
 
     File(filePath).writeAsBytesSync(file!);
-    displayToast("Your File is this directory:" + filePath, context);
+    displayToast("Your File is this directory: $filePath", context);
 
     // You can now share or open the file using a file picker or other methods
     // For example, you can use the 'open_file' package to open the file.
