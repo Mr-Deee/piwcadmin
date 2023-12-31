@@ -111,7 +111,7 @@ class _AttendanceQRCodeScreenState extends State<AttendanceQRCodeScreen> {
               Container(  // Wrap QrImage in a Container or any appropriate widget
               child:  QrImageView(
                     data: qrCodeData,
-                    size: 100.0,
+                    size: 320.0,
                   ),),
                   SizedBox(height: 10.0),
                   Text(
